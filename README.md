@@ -17,8 +17,8 @@ A fullstack application for managing SWIFT codes (Bank Identifier Codes) used in
 ### Backend
 - Java 17
 - Spring Boot 3.x
-- Spring Data JPA
-- H2 Database (in-memory)
+- Spring Data MongoDB
+- MongoDB (document database)
 - Apache POI (for Excel processing)
 - Maven
 
@@ -44,7 +44,7 @@ A fullstack application for managing SWIFT codes (Bank Identifier Codes) used in
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/pcygan01/Remitly_swift_codes.git
    cd swift-codes-app
    ```
 
