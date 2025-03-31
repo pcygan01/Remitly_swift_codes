@@ -32,27 +32,6 @@ A fullstack application for managing SWIFT codes (Bank Identifier Codes) used in
 - Docker & Docker Compose
 - Nginx (for serving frontend)
 
-## Project Structure
-
-```
-swift-codes-app/
-├── backend/                # Spring Boot backend application
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/...    # Java source code
-│   │   │   └── resources/  # Application properties and resources
-│   │   └── test/           # Test files
-│   ├── pom.xml             # Maven configuration
-│   └── Dockerfile          # Backend Docker configuration
-├── frontend/               # React frontend application
-│   ├── public/             # Static files
-│   ├── src/                # React components and services
-│   ├── package.json        # NPM dependencies
-│   ├── Dockerfile          # Frontend Docker configuration
-│   └── nginx.conf          # Nginx configuration
-├── docker-compose.yml      # Docker Compose configuration
-└── README.md               # Project documentation
-```
 
 ## Setup and Running the Application
 
