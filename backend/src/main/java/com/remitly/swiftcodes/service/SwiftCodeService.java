@@ -6,7 +6,6 @@ import com.remitly.swiftcodes.model.SwiftCodeResponse;
 
 public interface SwiftCodeService {
     
-
     SwiftCodeResponse getSwiftCode(String swiftCode);
     
     CountrySwiftCodesResponse getSwiftCodesByCountry(String countryISO2);
@@ -16,4 +15,6 @@ public interface SwiftCodeService {
     String deleteSwiftCode(String swiftCode);
 
     void initializeDataFromExcel();
+
+    String getCountryNameByISO2(String countryISO2);
 } 

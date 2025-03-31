@@ -3,207 +3,205 @@ import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
-// Mapowanie kodów krajów na ich nazwy
 const COUNTRY_CODES = {
-  "PL": "Polska",
-  "MT": "Malta",
-  "US": "Stany Zjednoczone",
-  "GB": "Wielka Brytania",
-  "DE": "Niemcy",
-  "FR": "Francja",
-  "IT": "Włochy",
-  "ES": "Hiszpania",
-  "PT": "Portugalia",
-  "NL": "Holandia",
-  "BE": "Belgia",
-  "LU": "Luksemburg",
-  "IE": "Irlandia",
-  "DK": "Dania",
-  "SE": "Szwecja",
-  "FI": "Finlandia",
-  "AT": "Austria",
-  "CY": "Cypr",
-  "CZ": "Czechy",
-  "EE": "Estonia",
-  "HU": "Węgry",
-  "LV": "Łotwa",
-  "LT": "Litwa",
-  "RO": "Rumunia",
-  "SK": "Słowacja",
-  "SI": "Słowenia",
-  "BG": "Bułgaria",
-  "HR": "Chorwacja",
-  "CH": "Szwajcaria",
-  "NO": "Norwegia",
-  "IS": "Islandia",
-  "RU": "Rosja",
-  "UA": "Ukraina",
-  "BY": "Białoruś",
-  "MD": "Mołdawia",
-  "RS": "Serbia",
-  "ME": "Czarnogóra",
-  "AL": "Albania",
-  "MK": "Macedonia Północna",
-  "GR": "Grecja",
-  "TR": "Turcja",
-  "AZ": "Azerbejdżan",
-  "GE": "Gruzja",
-  "AM": "Armenia",
-  "IR": "Iran",
-  "IQ": "Irak",
-  "SA": "Arabia Saudyjska",
-  "KW": "Kuwejt",
-  "AE": "Zjednoczone Emiraty Arabskie",
-  "QA": "Katar",
-  "BH": "Bahrajn",
-  "OM": "Oman",
-  "YE": "Jemen",
-  "SY": "Syria",
-  "JO": "Jordania",
-  "LB": "Liban",
-  "IL": "Izrael",
-  "PS": "Palestyna",
-  "EG": "Egipt",
-  "SD": "Sudan",
-  "LY": "Libia",
-  "TN": "Tunezja",
-  "DZ": "Algieria",
-  "MA": "Maroko",
-  "CA": "Kanada",
-  "MX": "Meksyk",
-  "BR": "Brazylia",
-  "AR": "Argentyna",
-  "CO": "Kolumbia",
-  "PE": "Peru",
-  "VE": "Wenezuela",
-  "CL": "Chile",
-  "EC": "Ekwador",
-  "BO": "Boliwia",
-  "PY": "Paragwaj",
-  "UY": "Urugwaj",
-  "CN": "Chiny",
-  "JP": "Japonia",
-  "KR": "Korea Południowa",
-  "IN": "Indie",
-  "AU": "Australia",
-  "NZ": "Nowa Zelandia",
-  "ZA": "Republika Południowej Afryki",
-  // Dodatkowe kraje z fix-script-countries.min.js
-  "AD": "Andora",
-  "AF": "Afganistan",
-  "AG": "Antigua i Barbuda",
-  "AO": "Angola",
-  "BA": "Bośnia i Hercegowina",
-  "BB": "Barbados",
-  "BD": "Bangladesz",
-  "BF": "Burkina Faso",
-  "BI": "Burundi",
-  "BJ": "Benin",
-  "BM": "Bermudy",
-  "BN": "Brunei",
-  "BS": "Bahamy",
-  "BT": "Bhutan",
-  "BW": "Botswana",
-  "BZ": "Belize",
-  "CD": "Demokratyczna Republika Konga",
-  "CF": "Republika Środkowoafrykańska",
-  "CG": "Kongo",
-  "CI": "Wybrzeże Kości Słoniowej",
-  "CM": "Kamerun",
-  "CR": "Kostaryka",
-  "CU": "Kuba",
-  "CV": "Republika Zielonego Przylądka",
-  "DJ": "Dżibuti",
-  "DM": "Dominika",
-  "DO": "Dominikana",
-  "ER": "Erytrea",
-  "ET": "Etiopia",
-  "FJ": "Fidżi",
-  "FM": "Mikronezja",
-  "GA": "Gabon",
-  "GD": "Grenada",
-  "GH": "Ghana",
-  "GM": "Gambia",
-  "GN": "Gwinea",
-  "GQ": "Gwinea Równikowa",
-  "GT": "Gwatemala",
-  "GW": "Gwinea Bissau",
-  "GY": "Gujana",
-  "HK": "Hongkong",
-  "HN": "Honduras",
-  "HT": "Haiti",
-  "ID": "Indonezja",
-  "JM": "Jamajka",
-  "KE": "Kenia",
-  "KG": "Kirgistan",
-  "KH": "Kambodża",
-  "KI": "Kiribati",
-  "KM": "Komory",
-  "KN": "Saint Kitts i Nevis",
-  "KP": "Korea Północna",
-  "KZ": "Kazachstan",
-  "LA": "Laos",
-  "LC": "Saint Lucia",
-  "LI": "Liechtenstein",
-  "LK": "Sri Lanka",
-  "LR": "Liberia",
-  "LS": "Lesotho",
-  "MC": "Monako",
-  "MG": "Madagaskar",
-  "MH": "Wyspy Marshalla",
-  "ML": "Mali",
-  "MM": "Mjanma",
-  "MN": "Mongolia",
-  "MR": "Mauretania",
-  "MU": "Mauritius",
-  "MV": "Malediwy",
-  "MW": "Malawi",
-  "MY": "Malezja",
-  "MZ": "Mozambik",
-  "NA": "Namibia",
-  "NE": "Niger",
-  "NG": "Nigeria",
-  "NI": "Nikaragua",
-  "NP": "Nepal",
-  "NR": "Nauru",
-  "PA": "Panama",
-  "PG": "Papua-Nowa Gwinea",
-  "PH": "Filipiny",
-  "PK": "Pakistan",
-  "PR": "Portoryko",
-  "RW": "Rwanda",
-  "SB": "Wyspy Salomona",
-  "SC": "Seszele",
-  "SG": "Singapur",
-  "SL": "Sierra Leone",
-  "SM": "San Marino",
-  "SN": "Senegal",
-  "SO": "Somalia",
-  "SR": "Surinam",
-  "SS": "Sudan Południowy",
-  "ST": "Wyspy Świętego Tomasza i Książęca",
-  "SV": "Salwador",
-  "SZ": "Eswatini",
-  "TD": "Czad",
-  "TG": "Togo",
-  "TH": "Tajlandia",
-  "TJ": "Tadżykistan",
-  "TL": "Timor Wschodni",
-  "TM": "Turkmenistan",
-  "TO": "Tonga",
-  "TT": "Trynidad i Tobago",
-  "TV": "Tuvalu",
-  "TW": "Tajwan",
-  "TZ": "Tanzania",
-  "UG": "Uganda",
-  "UZ": "Uzbekistan",
-  "VA": "Watykan",
-  "VC": "Saint Vincent i Grenadyny",
-  "VN": "Wietnam",
-  "VU": "Vanuatu",
-  "WS": "Samoa",
-  "ZM": "Zambia",
-  "ZW": "Zimbabwe"
+  "PL": "POLAND",
+  "MT": "MALTA",
+  "US": "UNITED STATES",
+  "GB": "GREAT BRITAIN",
+  "DE": "GERMANY",
+  "FR": "FRANCE",
+  "IT": "ITALY",
+  "ES": "SPAIN",
+  "PT": "PORTUGAL",
+  "NL": "NETHERLANDS",
+  "BE": "BELGIUM",
+  "LU": "LUXEMBOURG",
+  "IE": "IRELAND",
+  "DK": "DENMARK",
+  "SE": "SWEDEN",
+  "FI": "FINLAND",
+  "AT": "AUSTRIA",
+  "CY": "CYPRUS",
+  "CZ": "CZECH REPUBLIC",
+  "EE": "ESTONIA",
+  "HU": "HUNGARY",
+  "LV": "LATVIA",
+  "LT": "LITHUANIA",
+  "RO": "ROMANIA",
+  "SK": "SLOVAKIA",
+  "SI": "SLOVENIA",
+  "BG": "BULGARIA",
+  "HR": "CROATIA",
+  "CH": "SWITZERLAND",
+  "NO": "NORWAY",
+  "IS": "ICELAND",
+  "RU": "RUSSIA",
+  "UA": "UKRAINE",
+  "BY": "BELARUS",
+  "MD": "MOLDOVA",
+  "RS": "SERBIA",
+  "ME": "MONTENEGRO",
+  "AL": "ALBANIA",
+  "MK": "NORTH MACEDONIA",
+  "GR": "GREECE",
+  "TR": "TURKEY",
+  "AZ": "AZERBAIJAN",
+  "GE": "GEORGIA",
+  "AM": "ARMENIA",
+  "IR": "IRAN",
+  "IQ": "IRAQ",
+  "SA": "SAUDI ARABIA",
+  "KW": "KUWAIT",
+  "AE": "UNITED ARAB EMIRATES",
+  "QA": "QATAR",
+  "BH": "BAHRAIN",
+  "OM": "OMAN",
+  "YE": "YEMEN",
+  "SY": "SYRIA",
+  "JO": "JORDAN",
+  "LB": "LEBANON",
+  "IL": "ISRAEL",
+  "PS": "PALESTINE",
+  "EG": "EGYPT",
+  "SD": "SUDAN",
+  "LY": "LIBYA",
+  "TN": "TUNISIA",
+  "DZ": "ALGERIA",
+  "MA": "MOROCCO",
+  "CA": "CANADA",
+  "MX": "MEXICO",
+  "BR": "BRAZIL",
+  "AR": "ARGENTINA",
+  "CO": "COLOMBIA",
+  "PE": "PERU",
+  "VE": "VENEZUELA",
+  "CL": "CHILE",
+  "EC": "ECUADOR",
+  "BO": "BOLIVIA",
+  "PY": "PARAGUAY",
+  "UY": "URUGUAY",
+  "CN": "CHINA",
+  "JP": "JAPAN",
+  "KR": "SOUTH KOREA",
+  "IN": "INDIA",
+  "AU": "AUSTRALIA",
+  "NZ": "NEW ZEALAND",
+  "ZA": "SOUTH AFRICA",
+  "AD": "ANDORRA",
+  "AF": "AFGHANISTAN",
+  "AG": "ANTIGUA AND BARBUDA",
+  "AO": "ANGOLA",
+  "BA": "BOSNIA AND HERZEGOVINA",
+  "BB": "BARBADOS",
+  "BD": "BANGLADESH",
+  "BF": "BURKINA FASO",
+  "BI": "BURUNDI",
+  "BJ": "BENIN",
+  "BM": "BERMUDA",
+  "BN": "BRUNEI",
+  "BS": "BAHAMAS",
+  "BT": "BHUTAN",
+  "BW": "BOTSWANA",
+  "BZ": "BELIZE",
+  "CD": "DEMOCRATIC REPUBLIC OF THE CONGO",
+  "CF": "CENTRAL AFRICAN REPUBLIC",
+  "CG": "CONGO",
+  "CI": "IVORY COAST",
+  "CM": "CAMEROON",
+  "CR": "COSTA RICA",
+  "CU": "CUBA",
+  "CV": "CAPE VERDE",
+  "DJ": "DJIBOUTI",
+  "DM": "DOMINICA",
+  "DO": "DOMINICAN REPUBLIC",
+  "ER": "ERITREA",
+  "ET": "ETHIOPIA",
+  "FJ": "FIJI",
+  "FM": "MICRONESIA",
+  "GA": "GABON",
+  "GD": "GRENADA",
+  "GH": "GHANA",
+  "GM": "GAMBIA",
+  "GN": "GUINEA",
+  "GQ": "EQUATORIAL GUINEA",
+  "GT": "GUATEMALA",
+  "GW": "GUINEA-BISSAU",
+  "GY": "GUYANA",
+  "HK": "HONG KONG",
+  "HN": "HONDURAS",
+  "HT": "HAITI",
+  "ID": "INDONESIA",
+  "JM": "JAMAICA",
+  "KE": "KENYA",
+  "KG": "KYRGYZSTAN",
+  "KH": "CAMBODIA",
+  "KI": "KIRIBATI",
+  "KM": "COMOROS",
+  "KN": "SAINT KITTS AND NEVIS",
+  "KP": "NORTH KOREA",
+  "KZ": "KAZAKHSTAN",
+  "LA": "LAOS",
+  "LC": "SAINT LUCIA",
+  "LI": "LIECHTENSTEIN",
+  "LK": "SRI LANKA",
+  "LR": "LIBERIA",
+  "LS": "LESOTHO",
+  "MC": "MONACO",
+  "MG": "MADAGASCAR",
+  "MH": "MARSHALL ISLANDS",
+  "ML": "MALI",
+  "MM": "MYANMAR",
+  "MN": "MONGOLIA",
+  "MR": "MAURITANIA",
+  "MU": "MAURITIUS",
+  "MV": "MALDIVES",
+  "MW": "MALAWI",
+  "MY": "MALAYSIA",
+  "MZ": "MOZAMBIQUE",
+  "NA": "NAMIBIA",
+  "NE": "NIGER",
+  "NG": "NIGERIA",
+  "NI": "NICARAGUA",
+  "NP": "NEPAL",
+  "NR": "NAURU",
+  "PA": "PANAMA",
+  "PG": "PAPUA NEW GUINEA",
+  "PH": "PHILIPPINES",
+  "PK": "PAKISTAN",
+  "PR": "PUERTO RICO",
+  "RW": "RWANDA",
+  "SB": "SOLOMON ISLANDS",
+  "SC": "SEYCHELLES",
+  "SG": "SINGAPORE",
+  "SL": "SIERRA LEONE",
+  "SM": "SAN MARINO",
+  "SN": "SENEGAL",
+  "SO": "SOMALIA",
+  "SR": "SURINAME",
+  "SS": "SOUTH SUDAN",
+  "ST": "SAO TOME AND PRINCIPE",
+  "SV": "EL SALVADOR",
+  "SZ": "ESWATINI",
+  "TD": "CHAD",
+  "TG": "TOGO",
+  "TH": "THAILAND",
+  "TJ": "TAJIKISTAN",
+  "TL": "EAST TIMOR",
+  "TM": "TURKMENISTAN",
+  "TO": "TONGA",
+  "TT": "TRINIDAD AND TOBAGO",
+  "TV": "TUVALU",
+  "TW": "TAIWAN",
+  "TZ": "TANZANIA",
+  "UG": "UGANDA",
+  "UZ": "UZBEKISTAN",
+  "VA": "VATICAN CITY",
+  "VC": "SAINT VINCENT AND THE GRENADINES",
+  "VN": "VIETNAM",
+  "VU": "VANUATU",
+  "WS": "SAMOA",
+  "ZM": "ZAMBIA",
+  "ZW": "ZIMBABWE"
 };
 
 const CreateSwiftCode = () => {
@@ -221,65 +219,70 @@ const CreateSwiftCode = () => {
   const [submitError, setSubmitError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     const { name, value, type, checked } = e.target;
     
     if (name === 'swiftCode' && value.length >= 6) {
-      // Gdy kod SWIFT ma co najmniej 6 znaków, możemy wyciągnąć kod kraju (5-6 pozycja)
       const countryCode = value.substring(4, 6).toUpperCase();
       
-      // Aktualizujemy formData z nowym kodem SWIFT oraz kodami kraju
-      setFormData({
-        ...formData,
-        [name]: value,
-        countryISO2: countryCode,
-        countryName: COUNTRY_CODES[countryCode] || ''
-      });
+      try {
+        setFormData(prev => ({
+          ...prev,
+          [name]: value,
+          countryISO2: countryCode
+        }));
+        
+        const countryInfo = await api.getCountryInfo(countryCode);
+        
+        setFormData(prev => ({
+          ...prev,
+          countryName: countryInfo.countryName
+        }));
+      } catch (error) {
+        console.error('Error fetching country info:', error);
+        setFormData(prev => ({
+          ...prev,
+          countryName: COUNTRY_CODES[countryCode] || ''
+        }));
+      }
     } else {
-      // Dla innych pól lub gdy SWIFT jest za krótki, aktualizujemy tylko to pole
-      setFormData({
-        ...formData,
+      setFormData(prev => ({
+        ...prev,
         [name]: type === 'checkbox' ? checked : value
-      });
+      }));
     }
     
-    // Clear field-specific error when user edits
     if (errors[name]) {
-      setErrors({
-        ...errors,
+      setErrors(prev => ({
+        ...prev,
         [name]: ''
-      });
+      }));
     }
   };
 
   const validateForm = () => {
     const newErrors = {};
     
-    // Validate SWIFT code (4 letter bank code + 2 letter country code + 2 alphanumeric + optional 3 branch code)
     if (!formData.swiftCode) {
       newErrors.swiftCode = 'SWIFT code is required';
     } else if (!/^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/.test(formData.swiftCode)) {
       newErrors.swiftCode = 'Invalid SWIFT code format';
     }
     
-    // Validate bank name
     if (!formData.bankName.trim()) {
       newErrors.bankName = 'Bank name is required';
     }
     
-    // Validate country ISO2
     if (!formData.countryISO2.trim()) {
       newErrors.countryISO2 = 'Country ISO2 code is required';
     } else if (!/^[A-Z]{2}$/.test(formData.countryISO2)) {
       newErrors.countryISO2 = 'Country ISO2 must be a valid 2-letter code';
     }
     
-    // Validate country name
     if (!formData.countryName.trim()) {
       newErrors.countryName = 'Country name is required';
     }
     
-    // Validate that country code in SWIFT matches the country ISO2 field
     if (formData.swiftCode.length >= 6 && 
         formData.countryISO2 && 
         formData.swiftCode.substring(4, 6) !== formData.countryISO2) {
@@ -292,14 +295,12 @@ const CreateSwiftCode = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validate form
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
     
-    // Convert to uppercase as per requirements
     const submissionData = {
       ...formData,
       countryISO2: formData.countryISO2.toUpperCase(),
@@ -314,7 +315,6 @@ const CreateSwiftCode = () => {
       const response = await api.createSwiftCode(submissionData);
       setSubmitSuccess(response.message || 'SWIFT code created successfully');
       
-      // Clear the form
       setFormData({
         swiftCode: '',
         bankName: '',
@@ -324,7 +324,6 @@ const CreateSwiftCode = () => {
         isHeadquarter: false
       });
       
-      // Redirect to the newly created SWIFT code after a delay
       setTimeout(() => {
         navigate(`/swift-code/${submissionData.swiftCode}`);
       }, 2000);

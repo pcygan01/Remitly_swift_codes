@@ -58,7 +58,7 @@ public class SwiftCodeMongoServiceImpl implements SwiftCodeService {
             
             List<SwiftCodeMongo> branches = swiftCodeRepository.findBranchesByHeadquarterSwiftCodePrefix(swiftCodePrefix)
                     .stream()
-                    .filter(branch -> !branch.getSwiftCode().equals(swiftCode)) // Exclude the headquarter itself
+                    .filter(branch -> !branch.getSwiftCode().equals(swiftCode))
                     .toList();
             
             List<SwiftCodeBranchDTO> branchDTOs = branches.stream()
@@ -120,6 +120,11 @@ public class SwiftCodeMongoServiceImpl implements SwiftCodeService {
         
         swiftCodeRepository.deleteBySwiftCode(swiftCode);
         return "SWIFT code deleted successfully";
+    }
+    
+    @Override
+    public String getCountryNameByISO2(String countryISO2) {
+        return excelReader.getCountryNameByISO2(countryISO2);
     }
     
     private SwiftCodeResponse mapToSwiftCodeResponse(SwiftCodeMongo swiftCode) {

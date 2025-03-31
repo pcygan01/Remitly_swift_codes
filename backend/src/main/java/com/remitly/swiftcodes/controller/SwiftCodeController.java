@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/v1/swift-codes")
 @RequiredArgsConstructor
@@ -40,5 +43,19 @@ public class SwiftCodeController {
     public ResponseEntity<ApiResponse> deleteSwiftCode(@PathVariable String swiftCode) {
         String message = swiftCodeService.deleteSwiftCode(swiftCode);
         return ResponseEntity.ok(new ApiResponse(message));
+    }
+
+    @GetMapping("/country-info/{countryISO2}")
+    public ResponseEntity<Map<String, String>> getCountryInfo(@PathVariable String countryISO2) {
+        String countryName = swiftCodeService.getCountryNameByISO2(countryISO2.toUpperCase());
+        if (countryName == null) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        Map<String, String> response = new HashMap<>();
+        response.put("countryISO2", countryISO2.toUpperCase());
+        response.put("countryName", countryName);
+        
+        return ResponseEntity.ok(response);
     }
 } 
