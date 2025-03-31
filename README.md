@@ -160,13 +160,6 @@ Navigate to the backend directory and run:
 mvn test
 ```
 
-### Frontend Tests
-
-Navigate to the frontend directory and run:
-```bash
-npm test
-```
-
 ## Data Model
 
 The application implements the following data model for SWIFT codes:
@@ -181,15 +174,3 @@ The application implements the following data model for SWIFT codes:
 Headquarter-branch relationships are determined as follows:
 - Codes ending with `XXX` represent a bank's headquarters
 - Branches are associated with a headquarters if their first 8 characters match
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/your-feature`)
-3. Commit your changes (`git commit -m 'Add your feature'`)
-4. Push to the branch (`git push origin feature/your-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License. 
